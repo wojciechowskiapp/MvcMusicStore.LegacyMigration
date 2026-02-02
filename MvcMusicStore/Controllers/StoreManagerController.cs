@@ -1,114 +1,90 @@
-﻿using MvcMusicStore.Models;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MvcMusicStore.Models;
+using Microsoft.Extensions.Logging;
+using MvcMusicStore.Application.Common.Interfaces;
 
 namespace MvcMusicStore.Controllers
 {
     [Authorize(Roles = "Administrator")]
+    [Route("[controller]")]
     public class StoreManagerController : Controller
     {
-        private MusicStoreEntities db = new MusicStoreEntities();
-
+        private readonly IMediator _mediator;
+        private readonly MusicStoreEntities _context;
+        private readonly ILogger<StoreManagerController> _logger;
+        public StoreManagerController(MusicStoreEntities context, ILogger<StoreManagerController> logger, IMediator mediator)
+        {
+            _context = context;
+            _logger = logger;
+            _mediator = mediator;
+        }
+        [HttpGet]
         //
         // GET: /StoreManager/
-
-        public ViewResult Index()
+        public async Task<IActionResult> Index()
         {
-            var albums = db.Albums.Include(a => a.Genre).Include(a => a.Artist);
-            return View(albums.ToList());
+            var result = await _mediator.Send(new StoreManagerGetListQuery());
+            return result.IsSuccess ? View(result.Value) : NotFound();
         }
-
+        [HttpGet("{id:int}")]
         //
         // GET: /StoreManager/Details/5
-
-        public ViewResult Details(int id)
+        public async Task<IActionResult> Details([FromRoute] int id)
         {
-            Album album = db.Albums.Find(id);
-            return View(album);
+            var result = await _mediator.Send(new StoreManagerGetByIdQuery { Id = id });
+            return result.IsSuccess ? View(result.Value) : NotFound();
         }
-
+        [HttpPost]
         //
         // GET: /StoreManager/Create
-
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name");
-            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name");
-            return View();
-        }
-
-        //
-        // POST: /StoreManager/Create
-
+            var result = await _mediator.Send(new StoreManagerCreateCommand());
+            return result.IsSuccess ? View(result.Value) : NotFound();
+        }//
+         // POST: /StoreManager/Create
         [HttpPost]
-        public ActionResult Create(Album album)
+        public async Task<IActionResult> Create([FromBody] Album album)
         {
-            if (ModelState.IsValid)
-            {
-                db.Albums.Add(album);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
-            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
-            return View(album);
+            var result = await _mediator.Send(new StoreManagerCreateCommand { Album = album });
+            return result.IsSuccess ? View(result.Value) : NotFound();
         }
-
+        [HttpPut("{id:int}")]
         //
         // GET: /StoreManager/Edit/5
-
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit([FromRoute] int id)
         {
-            Album album = db.Albums.Find(id);
-            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
-            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
-            return View(album);
-        }
-
-        //
-        // POST: /StoreManager/Edit/5
-
+            var result = await _mediator.Send(new StoreManagerEditCommand { Id = id });
+            return result.IsSuccess ? View(result.Value) : NotFound();
+        }//
+         // POST: /StoreManager/Edit/5
         [HttpPost]
-        public ActionResult Edit(Album album)
+        public async Task<IActionResult> Edit([FromBody] Album album)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(album).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
-            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
-            return View(album);
+            var result = await _mediator.Send(new StoreManagerEditCommand { Album = album });
+            return result.IsSuccess ? View(result.Value) : NotFound();
         }
-
+        [HttpDelete("{id:int}")]
         //
         // GET: /StoreManager/Delete/5
-
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            Album album = db.Albums.Find(id);
-            return View(album);
-        }
-
-        //
-        // POST: /StoreManager/Delete/5
-
+            var result = await _mediator.Send(new StoreManagerDeleteCommand { Id = id });
+            return result.IsSuccess ? View(result.Value) : NotFound();
+        }//
+         // POST: /StoreManager/Delete/5
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed([FromRoute] int id)
         {
-            Album album = db.Albums.Find(id);
-            db.Albums.Remove(album);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var result = await _mediator.Send(new StoreManagerDeleteConfirmedCommand { Id = id });
+            return result.IsSuccess ? RedirectToAction("Index") : BadRequest();
         }
-
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            _context.Dispose();
             base.Dispose(disposing);
         }
     }
