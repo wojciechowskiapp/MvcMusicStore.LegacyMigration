@@ -1,12 +1,19 @@
-﻿@model IEnumerable<MvcMusicStore.Models.Album>
+@model IEnumerable<MvcMusicStore.Models.Album>
 
-@helper Truncate(string input, int length)
-{
-    if (input.Length <= length) {
-        @input
-    } else {
-        @input.Substring(0, length)<text>...</text>
+@* TODO: @helper 'Truncate' converted to local function. Move to @functions block or create a partial view. *@
+@* Original: @helper Truncate(string input, int length) *@
+@{
+    // Local function (move to @functions block at top of file)
+        // TODO: Manually convert @helper 'Truncate' to a local function or partial view
+    // Original: @helper Truncate(string input, int length) { if (input.Length <= length) {         @input     } else {         @input.Substring(0, length)<text>...</text>     } }
+    // Option 1: Convert to local function in @functions block
+    // Option 2: Create a partial view '__Truncate.cshtml' and use <partial name="__Truncate" />
+    // Option 3: Create a Tag Helper or View Component for reusability
+    string Truncate(string input, int length)
+    {
+        throw new NotImplementedException("@helper 'Truncate' requires manual conversion");
     }
+
 }
 
 @{
@@ -16,7 +23,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a asp-action="Create">Create New</a>
 </p>
 <table>
     <tr>
@@ -38,7 +45,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Genre.Name)
+            <span>@Model.Genre.Name</span>
         </td>
         <td>
             @Truncate(item.Artist.Name, 25)
@@ -47,12 +54,12 @@
             @Truncate(item.Title, 25)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Price)
+            <span>@Model.Price</span>
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.AlbumId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.AlbumId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.AlbumId })
+            <a asp-action="Edit" asp-route-id="item.AlbumId ">Edit</a> |
+            <a asp-action="Details" asp-route-id="item.AlbumId ">Details</a> |
+            <a asp-action="Delete" asp-route-id="item.AlbumId ">Delete</a>
         </td>
     </tr>
 }

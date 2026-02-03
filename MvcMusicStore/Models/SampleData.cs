@@ -1,12 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace MvcMusicStore.Models
 {
-    public class SampleData : DropCreateDatabaseIfModelChanges<MusicStoreEntities>
+    // TODO: EF Core migration guidance for SampleData
+    // This class inherited from DropCreateDatabaseIfModelChanges<MusicStoreEntities> which doesn't exist in EF Core.
+    //
+    // Options for migrating the Seed() method:
+    // 1. Use HasData() in OnModelCreating for static seed data:
+    //    modelBuilder.Entity<Genre>().HasData(new Genre { GenreId = 1, Name = "Rock" });
+    //
+    // 2. Create a separate seed service called from Program.cs:
+    //    public class DataSeeder { public void Seed(MusicStoreEntities context) { ... } }
+    //
+    // 3. Use EF Core migrations with data seeding in migrations.
+    //
+    // For database initialization, use in Program.cs:
+    //    var scope = app.Services.CreateScope();
+    //    var db = scope.ServiceProvider.GetRequiredService<MusicStoreEntities>();
+    //    db.Database.Migrate(); // or db.Database.EnsureCreated()
+
+    public class SampleData
     {
-        protected override void Seed(MusicStoreEntities context)
+        public void Seed(MusicStoreEntities context)
         {
             var genres = new List<Genre>
             {

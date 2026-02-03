@@ -1,0 +1,39 @@
+namespace MvcMusicStore.Application.StoreManager.Queries;
+
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
+using MvcMusicStore.Application.Common;
+using MvcMusicStore.Application.Common.Interfaces;
+using MvcMusicStore.Application.Common.Extensions;
+using MvcMusicStore.Models;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Query for Index operation.
+/// </summary>
+public record StoreManagerGetListQuery : IRequest<Result>;
+
+/// <summary>
+/// Handles the StoreManagerGetListQuery query.
+/// </summary>
+public sealed class StoreManagerGetListHandler : IRequestHandler<StoreManagerGetListQuery, Result>
+{
+    private readonly IApplicationDbContext _context;
+    private readonly ILogger<StoreManagerGetListHandler> _logger;
+
+    public StoreManagerGetListHandler(IApplicationDbContext context, ILogger<StoreManagerGetListHandler> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
+
+    public Task<Result> Handle(StoreManagerGetListQuery request, CancellationToken cancellationToken)
+    {
+        // Business logic from StoreManagerController.Index
+        var albums = _context.Albums.Include(a => a.Genre).Include(a => a.Artist);
+        return Result.Success(albums.ToList());
+    }
+}

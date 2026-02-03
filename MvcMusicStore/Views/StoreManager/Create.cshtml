@@ -1,4 +1,4 @@
-﻿@model MvcMusicStore.Models.Album
+@model MvcMusicStore.Models.Album
 
 @{
     ViewBag.Title = "Create";
@@ -6,60 +6,60 @@
 
 <h2>Create</h2>
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="~/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="~/js/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
 
-@using (Html.BeginForm()) {
-    @Html.ValidationSummary(true)
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
     <fieldset>
         <legend>Album</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.GenreId, "Genre")
+            <label asp-for="GenreId">Genre</label>
         </div>
         <div class="editor-field">
-            @Html.DropDownList("GenreId", String.Empty)
-            @Html.ValidationMessageFor(model => model.GenreId)
+            <select name="GenreId" asp-items="ViewBag.GenreId"><option value="">Select...</option></select>
+            <span asp-validation-for="GenreId"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.ArtistId, "Artist")
+            <label asp-for="ArtistId">Artist</label>
         </div>
         <div class="editor-field">
-            @Html.DropDownList("ArtistId", String.Empty)
-            @Html.ValidationMessageFor(model => model.ArtistId)
+            <select name="ArtistId" asp-items="ViewBag.ArtistId"><option value="">Select...</option></select>
+            <span asp-validation-for="ArtistId"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Title)
+            <label asp-for="Title"></label>
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Title)
-            @Html.ValidationMessageFor(model => model.Title)
+            <input asp-for="Title" />
+            <span asp-validation-for="Title"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Price)
+            <label asp-for="Price"></label>
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Price)
-            @Html.ValidationMessageFor(model => model.Price)
+            <input asp-for="Price" />
+            <span asp-validation-for="Price"></span>
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.AlbumArtUrl)
+            <label asp-for="AlbumArtUrl"></label>
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.AlbumArtUrl)
-            @Html.ValidationMessageFor(model => model.AlbumArtUrl)
+            <input asp-for="AlbumArtUrl" />
+            <span asp-validation-for="AlbumArtUrl"></span>
         </div>
 
         <p>
             <input type="submit" value="Create" />
         </p>
     </fieldset>
-}
+</form>
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <a asp-action="Index">Back to List</a>
 </div>

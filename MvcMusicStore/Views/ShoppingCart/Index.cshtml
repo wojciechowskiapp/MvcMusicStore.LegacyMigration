@@ -1,4 +1,4 @@
-﻿@model MvcMusicStore.ViewModels.ShoppingCartViewModel
+@model MvcMusicStore.ViewModels.ShoppingCartViewModel
 @{
     ViewBag.Title = "Shopping Cart";
 }
@@ -54,7 +54,7 @@
     <em>Review</em> your cart:
 </h3>
 <p class="button">
-    @Html.ActionLink("Checkout >>", "AddressAndPayment", "Checkout")
+    <a asp-controller="Checkout" asp-action="AddressAndPayment">Checkout >></a>
 </p>
 <div id="update-message">
 </div>
