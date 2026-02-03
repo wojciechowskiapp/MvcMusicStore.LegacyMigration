@@ -1,4 +1,4 @@
-﻿@model MvcMusicStore.Models.Album
+@model MvcMusicStore.Models.Album
 
 @{
     ViewBag.Title = "Details";
@@ -11,30 +11,30 @@
 
     <div class="display-label">Genre</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Genre.Name)
+        <span>@Model.Genre.Name</span>
     </div>
 
     <div class="display-label">Artist</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Artist.Name)
+        <span>@Model.Artist.Name</span>
     </div>
 
     <div class="display-label">Title</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Title)
+        <span>@Model.Title</span>
     </div>
 
     <div class="display-label">Price</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Price)
+        <span>@Model.Price</span>
     </div>
 
     <div class="display-label">AlbumArtUrl</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.AlbumArtUrl)
+        <span>@Model.AlbumArtUrl</span>
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.AlbumId }) |
-    @Html.ActionLink("Back to List", "Index")
+    <a asp-action="Edit" asp-route-id="Model.AlbumId ">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </p>

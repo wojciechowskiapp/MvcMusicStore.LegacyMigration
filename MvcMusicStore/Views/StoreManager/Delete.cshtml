@@ -1,4 +1,4 @@
-﻿@model MvcMusicStore.Models.Album
+@model MvcMusicStore.Models.Album
 
 @{
     ViewBag.Title = "Delete";
@@ -10,12 +10,12 @@
    <strong>@Model.Title</strong>?
 </p>
 
-@using (Html.BeginForm()) {
+<form method="post">
     <p>
         <input type="submit" value="Delete" />
     </p>
     <p>
-        @Html.ActionLink("Back to List", "Index")
+        <a asp-action="Index">Back to List</a>
     </p>
 
-}
+</form>
